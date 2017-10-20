@@ -62,15 +62,20 @@ extension PageSliderViewController: UIScrollViewDelegate {
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         finishOffset = collectionView.contentOffset
-        if decelerate {
-           collectionView.setContentOffset(finishOffset, animated: false)
-        }
+        
         let diffX = finishOffset.x - startOffset.x
         if abs(diffX) > minPageSwitchingOffset {
             currentPage += (diffX > 0) ? 1 : -1
         }
         // restrictions to avoid `OutOfRange` error
         currentPage = min(max(0, currentPage), collectionView.numberOfItems(inSection: 0) - 1)
+        if decelerate {
+            return
+        }
+        scrollToSlide(slide: currentPage)
+    }
+    
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         scrollToSlide(slide: currentPage)
     }
 }
