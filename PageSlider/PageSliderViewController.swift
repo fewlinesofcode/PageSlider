@@ -21,6 +21,7 @@ class PageSliderViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        collectionView.decelerationRate = 0.1
         registerNibs()
     }
     
@@ -52,15 +53,11 @@ extension PageSliderViewController: UICollectionViewDelegate {
 }
 
 extension PageSliderViewController: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-    }
-    
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         startOffset = collectionView.contentOffset
     }
     
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         finishOffset = collectionView.contentOffset
         
         let diffX = finishOffset.x - startOffset.x
@@ -69,13 +66,8 @@ extension PageSliderViewController: UIScrollViewDelegate {
         }
         // restrictions to avoid `OutOfRange` error
         currentPage = min(max(0, currentPage), collectionView.numberOfItems(inSection: 0) - 1)
-        if decelerate {
-            return
-        }
         scrollToSlide(slide: currentPage)
-    }
-    
-    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        scrollToSlide(slide: currentPage)
+        
+        targetContentOffset.pointee = CGPoint(x: collectionView.bounds.width * CGFloat(currentPage), y: 0)
     }
 }
