@@ -57,10 +57,10 @@ class PageSliderLayout: UICollectionViewLayout {
         
         let layoutAttributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         if let collectionView = self.collectionView {
-            let x: CGFloat = CGFloat(indexPath.row) * collectionView.bounds.width
-            let y: CGFloat = 0
-            let w: CGFloat = collectionView.bounds.width
-            let h: CGFloat = collectionView.bounds.height
+            let x: CGFloat = 50 + CGFloat(indexPath.row) * (collectionView.bounds.width - 100 + 40)
+            let y: CGFloat = 100
+            let w: CGFloat = collectionView.bounds.width - 100
+            let h: CGFloat = collectionView.bounds.height - 110
             layoutAttributes.frame = CGRect(x: x, y: y, width: w, height: h)
         }
         
@@ -72,7 +72,7 @@ class PageSliderLayout: UICollectionViewLayout {
         guard let collectionView = collectionView else {
             return CGSize.zero
         }
-        let w = CGFloat(collectionView.numberOfItems(inSection: 0)) * collectionView.bounds.size.width
+        let w = CGFloat(collectionView.numberOfItems(inSection: 0)) * (collectionView.bounds.size.width - 100 + 40)
         let h = collectionView.bounds.size.height
         return CGSize(width: w, height: h)
     }

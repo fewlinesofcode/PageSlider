@@ -21,8 +21,13 @@ class PageSliderViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.decelerationRate = 0.1
+        setupAppearance()
         registerNibs()
+    }
+    
+    private func setupAppearance() {
+        collectionView.decelerationRate = 0.1
+        collectionView.backgroundColor = UIColor.gray
     }
     
     private func registerNibs() {
@@ -38,7 +43,7 @@ class PageSliderViewController: UIViewController {
 
 extension PageSliderViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return 4
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -64,10 +69,13 @@ extension PageSliderViewController: UIScrollViewDelegate {
         if abs(diffX) > minPageSwitchingOffset {
             currentPage += (diffX > 0) ? 1 : -1
         }
+        
         // restrictions to avoid `OutOfRange` error
         currentPage = min(max(0, currentPage), collectionView.numberOfItems(inSection: 0) - 1)
         scrollToSlide(slide: currentPage)
         
-        targetContentOffset.pointee = CGPoint(x: collectionView.bounds.width * CGFloat(currentPage), y: 0)
+        
+        targetContentOffset.pointee = CGPoint(x: 50 - 20 + CGFloat(currentPage) * (collectionView.bounds.width - 100 + 40), y: 0)
+//        targetContentOffset.pointee = CGPoint(x: collectionView.bounds.width * CGFloat(currentPage), y: 0)
     }
 }
