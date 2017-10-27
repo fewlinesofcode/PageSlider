@@ -9,7 +9,16 @@
 import UIKit
 
 class PageSliderLayout: UICollectionViewLayout {
+    struct Config {
+        static let topSpace: CGFloat = 120
+        static let bottomSpace: CGFloat = 20
+        static let horizontalSpace: CGFloat = 20
+        static let inactiveCellVisibleAreaWidth: CGFloat = 20
+    }
+    
+    
     fileprivate var attributesCache = [IndexPath: UICollectionViewLayoutAttributes]()
+    
     
     override func prepare() {
         super.prepare()
@@ -57,10 +66,11 @@ class PageSliderLayout: UICollectionViewLayout {
         
         let layoutAttributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         if let collectionView = self.collectionView {
-            let x: CGFloat = 50 + CGFloat(indexPath.row) * (collectionView.bounds.width - 100 + 40)
-            let y: CGFloat = 100
-            let w: CGFloat = collectionView.bounds.width - 100
-            let h: CGFloat = collectionView.bounds.height - 110
+            let w: CGFloat = collectionView.bounds.width - Config.inactiveCellVisibleAreaWidth * 2 - Config.horizontalSpace * 2
+            let h: CGFloat = collectionView.bounds.height - Config.topSpace - Config.bottomSpace
+            let x: CGFloat = Config.inactiveCellVisibleAreaWidth + Config.horizontalSpace + CGFloat(indexPath.row) * (Config.horizontalSpace + w)
+            let y: CGFloat = Config.topSpace
+            
             layoutAttributes.frame = CGRect(x: x, y: y, width: w, height: h)
         }
         
@@ -72,7 +82,9 @@ class PageSliderLayout: UICollectionViewLayout {
         guard let collectionView = collectionView else {
             return CGSize.zero
         }
-        let w = CGFloat(collectionView.numberOfItems(inSection: 0)) * (collectionView.bounds.size.width - 100 + 40)
+        let cellW = collectionView.bounds.width - Config.inactiveCellVisibleAreaWidth * 2 - Config.horizontalSpace * 2
+        let numCells = collectionView.numberOfItems(inSection: 0)
+        let w = CGFloat(numCells) * cellW + CGFloat(numCells + 1) * Config.horizontalSpace + Config.inactiveCellVisibleAreaWidth * 2
         let h = collectionView.bounds.size.height
         return CGSize(width: w, height: h)
     }

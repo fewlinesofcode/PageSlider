@@ -34,11 +34,6 @@ class PageSliderViewController: UIViewController {
         let containerCellNib = UINib(nibName: "ContainerCell", bundle:nil)
         collectionView.register(containerCellNib, forCellWithReuseIdentifier: "ReuseId.Cell.container")
     }
-    
-    // Helpers
-    fileprivate func scrollToSlide(slide: Int) {
-        collectionView.scrollToItem(at: IndexPath(row: slide, section: 0), at: UICollectionViewScrollPosition.left, animated: true)
-    }
 }
 
 extension PageSliderViewController: UICollectionViewDataSource {
@@ -72,10 +67,9 @@ extension PageSliderViewController: UIScrollViewDelegate {
         
         // restrictions to avoid `OutOfRange` error
         currentPage = min(max(0, currentPage), collectionView.numberOfItems(inSection: 0) - 1)
-        scrollToSlide(slide: currentPage)
         
-        
-        targetContentOffset.pointee = CGPoint(x: 50 - 20 + CGFloat(currentPage) * (collectionView.bounds.width - 100 + 40), y: 0)
-//        targetContentOffset.pointee = CGPoint(x: collectionView.bounds.width * CGFloat(currentPage), y: 0)
+        let w: CGFloat = collectionView.bounds.width - PageSliderLayout.Config.inactiveCellVisibleAreaWidth * 2 - PageSliderLayout.Config.horizontalSpace * 2
+        let x: CGFloat = CGFloat(currentPage) * (w + PageSliderLayout.Config.horizontalSpace )
+        targetContentOffset.pointee = CGPoint(x: x, y: 0)
     }
 }
