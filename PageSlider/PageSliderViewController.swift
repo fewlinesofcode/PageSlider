@@ -8,7 +8,19 @@
 
 import UIKit
 
+//enum SupplementaryViewKind: String {
+//}
+
+struct ReuseId {
+    enum Cell: String {
+        case card = "CardCellReuseId"
+    }
+//    enum SupplementaryView: String {
+//    }
+}
+
 class PageSliderViewController: UIViewController {
+    
     @IBOutlet weak var collectionView: UICollectionView!
     
     // Costants
@@ -32,7 +44,7 @@ class PageSliderViewController: UIViewController {
     
     private func registerNibs() {
         let containerCellNib = UINib(nibName: "ContainerCell", bundle:nil)
-        collectionView.register(containerCellNib, forCellWithReuseIdentifier: "ReuseId.Cell.container")
+        collectionView.register(containerCellNib, forCellWithReuseIdentifier: ReuseId.Cell.card.rawValue)
     }
 }
 
@@ -42,7 +54,7 @@ extension PageSliderViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ReuseId.Cell.container", for: indexPath) as! ContainerCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReuseId.Cell.card.rawValue, for: indexPath) as! ContainerCell
         return cell
     }
 }
@@ -72,4 +84,9 @@ extension PageSliderViewController: UIScrollViewDelegate {
         let x: CGFloat = CGFloat(currentPage) * (w + PageSliderLayout.Config.horizontalSpace )
         targetContentOffset.pointee = CGPoint(x: x, y: 0)
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    }
+    
+    
 }
